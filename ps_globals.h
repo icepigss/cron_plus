@@ -7,6 +7,8 @@
 #define PS_TRUE     1 
 #define PS_FALSE    0 
 
+#define PS_OK       0 
+
 #define PS_SUCCESS  1 
 #define PS_FAILURE  0 
 
@@ -15,7 +17,15 @@
 
 #define PS_VMRSS_LINE 16 
 
-typedef unsigned long int   ps_int_t
-typedef unsigned char       ps_char_t
+#define PS_MAXLINE 1024 
+
+#define PS_RET_OK "OK"
+
+#define CRONFILE   "cron.conf" 
+
+#define _PATH_DEVNULL "/dev/null"
+
+typedef unsigned long int   ps_int_t;
+typedef unsigned char       ps_char_t;
 
 #endif

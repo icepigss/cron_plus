@@ -2,6 +2,7 @@
 #define _H_PS_CRON_
 
 #include "ps_globals.h"
+#include "ps_job.h"
 
 typedef struct cronqueue_s cronqueue_t;
 
@@ -16,6 +17,7 @@ struct cronqueue_s {
 
 void   cron_sleep(),
        regist_signal(),
-       parse_args(int, int **);
+       parse_args(int, int **),
+       free_cronlist(cronqueue_t *);
 
 #endif

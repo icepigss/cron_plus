@@ -3,7 +3,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "ps_lib.h"
+#include "ps_job.h"
 
 void
 exit_job_ps()
@@ -102,6 +102,11 @@ delete_job(cronqueue_t *cron_queue, joblist_t *job)
 {
 }
 
+/**
+ * perform tasks from cron-list,
+ * just check if the fist job-list meets the condition that job-time equal current time
+ * redistribute jobs to the cron-list after execute them
+ */
 void 
 run_job(cronqueue_t *cron_queue)
 {
@@ -130,4 +135,31 @@ run_job(cronqueue_t *cron_queue)
         add_job(&cron_queue, aj);
         aj = aj->next;
     }
+}
+
+void
+free_joblist(joblist_t *job)
+{
+    joblist_t *j *nj;
+    j = job;
+    while (NULL != j) {
+        nj = j->next;
+        free_joblist(j->child);
+        j->next = NULL;
+        free_job_node(j);
+        j = nj;
+    }
+}
+
+void
+free_job_node(cronqueue_t *node)
+{
+    node->child = NULL;
+    free(node->jobname);
+    free(node->responsible);
+    free(node->mails);
+    free(node->expression);
+    free(node->command);
+    free(node->parents);
+    free(node->child);
 }

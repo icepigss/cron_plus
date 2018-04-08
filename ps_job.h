@@ -1,6 +1,8 @@
 #ifndef _H_PS_JOB_
 #define _H_PS_JOB_
 
+#include "ps_globals.h"
+
 typedef struct joblist_s joblist_t;
 
 /* job node */
@@ -23,7 +25,7 @@ struct joblist_s {
         unsigned    f2:2; /* is there a parent */
         unsigned    f3:4; /* retry times */
         unsigned    f4:8; /* numbers of subprocess */
-    }
+    };
 };
 
 void    exit_job_ps(),
@@ -35,7 +37,9 @@ void    exit_job_ps(),
         refresh_job(joblist_t *),
         add_job(joblist_t *),
         delete_job(cronqueue_t * joblist_t *),
-        run_job(cronqueue_t *);
+        run_job(cronqueue_t *),
+        free_job_node(joblist_t *,
+        free_joblist(joblist_t *);
 
 joblist_t *
         find_job(cronqueue_t *, ps_int_t);
