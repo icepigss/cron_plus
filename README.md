@@ -16,3 +16,6 @@ A new crond server on linux, it is like linux's crond, but has more features:
 ### Extended
 - You can create a prety website to manage your tasks
 - You can also use it as a substitue for crond
+
+### APIs
+Upcoming updates
