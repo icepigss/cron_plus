@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include <assert.h>
-#include <string.h>
+#include "ps_cron.h"
 
 void *
 ps_malloc(size_t size)
@@ -21,9 +19,10 @@ ps_calloc(size_t nmemb, size_t size)
 {
     void *ptr = calloc(nmemb, size);
     assert(ptr != NULL);
-    reutrn ptr;
+    return ptr;
 }
 
+/*
 void *
 ps_realloc(void *ptr, size_t size)
 {
@@ -40,3 +39,4 @@ ps_copy_str(const char *src)
     assert(dest != NULL);
     return dest;
 }
+*/
