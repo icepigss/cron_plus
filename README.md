@@ -17,11 +17,10 @@ $./pcron -h
 cron_plus version: 1.0
 Usage: pcron [-?hvVtd] [-s signal] 
 Options:
-  -?,-h         : this help
-  -v,-V         : show version and exit
+  -?,-h         : show help
+  -v,-V         : show version
   -t type       : set config-type: mysql[m], file[f]
   -d            : set daemon mode
-
   -D            : debug mode
 ```
 
