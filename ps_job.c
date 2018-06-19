@@ -172,7 +172,7 @@ gettime_by_format(time_st *min, time_st *hour,
 			&& week->value == 0 && mon->value == 0) {
 		return next_min;
 	}
-    if (min->value >> TIME_MAP_LEN-3 == 1) {
+    if (min->value >> (TIME_MAP_LEN-3) == 1) {
     }
 	// TODO time parse
 

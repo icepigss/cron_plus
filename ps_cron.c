@@ -196,11 +196,11 @@ ps_show_version_info()
         ps_write_stderr(
                 "Usage: pcron [-?hvVtd] [-s signal] " PS_LINEFEED
                 "Options:" PS_LINEFEED
-                "  -?,-h         : this help" PS_LINEFEED
-                "  -v,-V         : show version and exit" PS_LINEFEED
+                "  -?,-h         : show help" PS_LINEFEED
+                "  -v,-V         : show version" PS_LINEFEED
                 "  -t type       : set config-type: "
                                    "mysql[m], file[f]" PS_LINEFEED
-                "  -d            : set daemon mode" PS_LINEFEED PS_LINEFEED
+                "  -d            : set daemon mode" PS_LINEFEED
                 "  -D            : debug mode" PS_LINEFEED PS_LINEFEED
                 );
     }

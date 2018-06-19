@@ -45,7 +45,6 @@ load_file_data(config_t *old_config)
         _exit(PS_FAILURE);
     }
 
-    fprintf(stdout, "dir: %s\n", configDir);
     while (NULL != (dp = readdir(dir))) {
         char fname[MAXNAMLEN+1], tabname[MAXNAMLEN+1];
         if(strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0) 
