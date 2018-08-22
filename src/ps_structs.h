@@ -5,7 +5,7 @@
 
 typedef struct time_s {
 	unsigned long value;
-	int gap;
+	int type; // 1:min 2:hour 3:day 4:week 5:mon
 } time_st;
 
 /* job node */

@@ -34,6 +34,17 @@
 
 #define SECONDS_PER_MINUTE 60
 
+#define MINUTES_PER_HOUR 60
+
+#define HOURS_PER_DAY 24
+
+#define DAYS_PER_WEEK 7
+
+#define MONS_PER_YEAR 12
+
+#define MINUTES_PER_DAY MINUTES_PER_HOUR*HOURS_PER_DAY
+#define MINUTES_PER_WEEK MINUTES_PER_DAY*DAYS_PER_WEEK
+
 #define PS_RET_OK "OK"
 
 #define PS_LINEFEED "\x0a"
@@ -56,6 +67,8 @@
 
 #define PS_LOG_FILE "log/pcron.log" 
 
+#define PS_DEBUG_FILE "log/debug.log" 
+
 #define PS_JOB_FILE "jobs/job" 
 
 #define _PATH_DEVNULL "/dev/null"
@@ -66,6 +79,18 @@
 
 #define STDERR	2
 
+#define TIME_TYPE_MIN  1
+
+#define TIME_TYPE_HOUR 2
+
+#define TIME_TYPE_DAY  3 
+
+#define TIME_TYPE_WEEK 4
+
+#define TIME_TYPE_MON 5 
+
+#define TIME_FORM_BAD (unsigned long)1 << 61
+
 //#define CMD_PATTERN  "(\\*|[0-9]|[1-5][0-9]|\\*/[1-9]+) (\\*|[0-9]|[1-5][0-9]|\\*/[1-9]+) (\\*|[0-9]|[1-5][0-9]|\\*/[1-9]+) (\\*|[0-9]|[1-5][0-9]|\\*/[1-9]+) (\\*|[0-9]|[1-5][0-9]|\\*/[1-9]+) (.*)"
 #define CMD_PATTERN  "([0-9\\*,-/]*) ([0-9\\*,-/]*) ([0-9\\*,-/]*) ([0-9\\*,-/]*) ([0-9\\*,-/]*) (.*)"
 
@@ -73,7 +98,7 @@ char   *ProgramName;
 
 int    LineNumber;
 
-int    MaxJobId;
+static int MaxJobId = 0;
 
 int    DebugFlags;
 

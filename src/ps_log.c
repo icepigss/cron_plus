@@ -45,3 +45,25 @@ ps_file_log(char *text, int jobid)
 
 	close(fd);
 }
+
+void
+ps_file_debug(char *text)
+{
+    int fd;
+    char logfile[50];
+
+    snprintf(logfile, sizeof(logfile), "%s", PS_DEBUG_FILE);
+
+    if ((fd = open(logfile, O_WRONLY|O_APPEND|O_CREAT, 0600)) == -1) {
+		fprintf(stderr, "%s create or open file error (%s)\n", ProgramName, strerror(errno));	
+        _exit(PS_FAILURE);
+    }
+
+	(void) fcntl(fd, F_SETFD, 1);
+
+	if (fd < 0 || write(fd, text, strlen(text)) < 0) {
+		fprintf(stderr, "%s: can't write to log file (%s)\n", ProgramName, strerror(errno));
+	}
+
+	close(fd);
+}

@@ -24,6 +24,15 @@
 #define Tran_Zero(n) \
 	((n == 0) ? TIME_MAP_LEN-3 : n)
 
+#define Detran_Zero(n) \
+	((n == TIME_MAP_LEN-3) ? 0 : n)
+
+#define Over_Sec(time, GMToff) \
+    (time+GMToff) % (time_t)SECONDS_PER_MINUTE
+
+#define Time_To_Min(time, GMToff) \
+	(time+GMToff) / (time_t)SECONDS_PER_MINUTE
+
 #define get_gmtoff(c, t)    ((t)->tm_gmtoff)
 
 #define SECONDS_PER_MINUTE  60

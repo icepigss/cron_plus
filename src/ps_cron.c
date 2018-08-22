@@ -348,11 +348,14 @@ main(int argc, char *argv[])
 				if (DebugFlags == 1) {
 					display_config(&config);
 				}
+                if (ps_daemon_flag == 1) {
+                    display_config_log(&config);
+                }
                 //load_config(&config);
                 //cron_queue = config->cron;
 				//int waiter;
 				//while ((pid = wait(&waiter)) < PS_OK && errno == EINTR)
-					;
+				//	;
 				if (got_sigchld) {
 					got_sigchld = 0;
 					sigchld_reaper();
@@ -362,6 +365,9 @@ main(int argc, char *argv[])
         default:
             close(pfd[0]);
             build_tcp_server(pfd);
+            if (DebugFlags == 1) {
+                fprintf(stdout, "tcp server \n");
+            }
             break;
     }
     _exit(PS_FAILURE);

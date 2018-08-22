@@ -74,7 +74,7 @@ load_config(config_t *old_config)
         mysql_ok = 1; 
     }
     if (mysql_ok == 0) {
-        // TODO check and load file config
+        // check and load file config
         load_file_data(old_config);
     }
 }
@@ -121,10 +121,52 @@ unlink_cron(config_t *config)
 }
 
 void
+display_config_log(config_t *config)
+{
+    int i = 1;
+    int j = 1;
+	int GMToff;
+    char buf[1000];
+	time_t now;
+	struct tm *timenow;
+	unsigned long current_min;
+    cronqueue_t *p = config->cron;
+    if (p == NULL) {
+        return;
+    }
+    joblist_t *job;
+
+	time(&now);
+	timenow = localtime(&now);
+	GMToff = get_gmtoff(&now, timenow);
+
+    current_min = Time_To_Min(now, GMToff);
+
+    memset(buf, '\0', sizeof(buf));
+    sprintf(buf, "\n-------------\ncurrent_min:%lu\n", current_min);
+    ps_file_debug(buf);
+    memset(buf, '\0', sizeof(buf));
+    while (p != NULL) {
+        sprintf(buf, "cron:%d:time:%lu\n", i++, p->timeframe);
+        ps_file_debug(buf);
+        memset(buf, '\0', sizeof(buf));
+        job = p->list;
+        p = p->next;
+        if (job == NULL) continue;
+        while (job != NULL) {
+            sprintf(buf, "\tjob:%d\n\t\tjobid:%d\n\t\tmin:%lu\n\t\thour:%lu\n\t\tday:%lu\n\t\tmon:%lu\n\t\tcmd:%s\n", j++, job->jobid, job->min.value, job->hour.value, job->day.value, job->mon.value, job->command);
+            ps_file_debug(buf);
+            memset(buf, '\0', sizeof(buf));
+            job = job->next;
+        }
+    }
+}
+
+void
 display_config(config_t *config)
 {
-    int i = 0;
-    int j = 0;
+    int i = 1;
+    int j = 1;
     cronqueue_t *p = config->cron;
     if (p == NULL) {
         return;
@@ -135,7 +177,7 @@ display_config(config_t *config)
         job = p->list;
         p = p->next;
         if (job == NULL) continue;
-        j = 0;
+        j = 1;
         while (job != NULL) {
             printf("\tjob:%d\n", j++);
             printf("\t\tjobid:%d\n", job->jobid);
@@ -219,12 +261,23 @@ load_cron(config_t *config, int crontab_fd, time_t mtime)
             continue;
         }
         job = createjob_by_arr(arr, offline);
-        if (DebugFlags == 1) {
-            if (job->jobid > 0) {
-                printf("create job success:%d\t%s\n", job->jobid, job->command);
+        if ((job->min.value >> 61) & (unsigned long)1 || (job->hour.value >> 61) & (unsigned long)1 \
+                || (job->day.value >> 61) & (unsigned long)1 || (job->mon.value >> 61) & (unsigned long)1 \
+                || (job->week.value >> 61) & (unsigned long)1) {
+            // TODO free job node
+            if (DebugFlags == 1) {
+                if (job->jobid > 0) {
+                    printf("create job faild:%d\t%s\n", job->jobid, job->command);
+                }
+            }
+        } else {
+            add_job(config, job, 0);
+            if (DebugFlags == 1) {
+                if (job->jobid > 0) {
+                    printf("create job success:%d\t%s\n", job->jobid, job->command);
+                }
             }
         }
-        add_job(config, job, 0);
     }
 
     if (DebugFlags == 1) {

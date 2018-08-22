@@ -23,7 +23,7 @@ void   cron_sleep1(int []),
 	   child_process(joblist_t *),
 	   do_command(joblist_t *),
 	   refresh_job(joblist_t *),
-	   add_job(config_t *, joblist_t *, int),
+	   add_job(config_t *, joblist_t *, unsigned long),
 	   delete_job(cronqueue_t *, joblist_t *),
 	   run_job(config_t *),
 	   free_job_node(joblist_t *),
@@ -33,9 +33,11 @@ void   cron_sleep1(int []),
 	   ps_free(void *),
 	   build_tcp_server(int []),
 	   ps_file_log(char *, int),
+	   ps_file_debug(char *),
 	   find_job(joblist_t *, cronqueue_t *, int),
-	   unit_format(unsigned long *, char *),
+	   unit_format(unsigned long *, char *, int),
 	   split_one(char, char *, char *, char *),
+	   display_config_log(config_t *),
 	   display_config(config_t *);
 
 void *
@@ -56,16 +58,25 @@ int    s_get_options(int, char *const *),
 	   get_char(FILE *),
 	   preg_match_cmd(char *, char (*)[PS_MAXCMD]),
 	   glue_strings(char *, size_t, const char *, const char *, char),
-	   in_str(char, char *);
+	   in_str(char, char *),
+	   get_time_diff_first(unsigned long, int),
+	   get_time_diff_next(unsigned long, int, int),
+	   check_first(unsigned long, int),
+	   validate_time_equal(int, int),
+	   get_current_index(unsigned long, int),
+	   validate_time_range(int, int, int),
+	   get_time_min(int),
+	   get_time_max(int),
+	   get_days_of_mon(int, int, int);
 
 char *	trim(char [], char *);
 
 time_t  get_current_time();
 
 unsigned long 
-	   gettime_by_format(time_st *, time_st *, time_st *, time_st *, time_st *, int);
+	   gettime_by_format(time_st *, time_st *, time_st *, time_st *, time_st *, unsigned long);
 time_st
-		time_format(char *str);
+		time_format(char *, int);
 
 joblist_t *
 	   createjob_by_arr(char (*)[PS_MAXCMD], int);
