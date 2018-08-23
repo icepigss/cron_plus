@@ -19,6 +19,7 @@ Usage: pcron [-?hvVtd] [-s signal]
 Options:
   -?,-h         : show help
   -v,-V         : show version
+  -c            : set file config dir: "
   -t type       : set config-type: mysql[m], file[f]
   -d            : set daemon mode
   -D            : debug mode

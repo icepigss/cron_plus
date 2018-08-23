@@ -1,5 +1,6 @@
 #include "ps_cron.h"
 
+static char* ps_etc_suffix = NULL;
 static int ps_show_help;
 static int ps_show_version;
 static int ps_daemon_flag;
@@ -162,6 +163,16 @@ ps_get_options(int argc, char *const *argv)
                 case 'V':
                     ps_show_version = 1;
                     break;
+                case 'c':
+                    if (*p) {
+                        ps_etc_suffix = p;
+                        goto next;
+                    }
+                    if (argv[++i]) {
+                        ps_etc_suffix = (char *) argv[i];
+                        goto next;
+                    }
+                    break;
                 case 'd':
                     ps_daemon_flag = 1;
                     break;
@@ -198,6 +209,7 @@ ps_show_version_info()
                 "Options:" PS_LINEFEED
                 "  -?,-h         : show help" PS_LINEFEED
                 "  -v,-V         : show version" PS_LINEFEED
+                "  -c            : set file config dir: "
                 "  -t type       : set config-type: "
                                    "mysql[m], file[f]" PS_LINEFEED
                 "  -d            : set daemon mode" PS_LINEFEED
@@ -218,6 +230,9 @@ init_env()
     DebugFlags = 0;
     ps_daemon_flag = 0;
 
+    memset(EtcDir, '\0', sizeof(EtcDir));
+    snprintf(EtcDir, sizeof(EtcDir), "%s/%s", getenv("HOME"), ETC_DIR);
+
 	memset(f, '\0', sizeof(f));
 	snprintf(f, sizeof(f), "%s/%s", h, WORK_DIR);
 	mkdir(f, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
@@ -228,9 +243,11 @@ init_env()
 	snprintf(f, sizeof(f), "%s/%s", h, VAR_DIR);
 	mkdir(f, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
+    /*
 	memset(f, '\0', sizeof(f));
 	snprintf(f, sizeof(f), "%s/%s", h, ETC_DIR);
 	mkdir(f, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    */
 
 	memset(f, '\0', sizeof(f));
 	snprintf(f, sizeof(f), "%s/%s", h, LOG_DIR);
@@ -282,6 +299,12 @@ main(int argc, char *argv[])
         return PS_ERROR;
     }
 
+    if (ps_etc_suffix != NULL) {
+        memset(EtcDir, '\0', sizeof(EtcDir));
+        snprintf(EtcDir, sizeof(EtcDir), "%s", ps_etc_suffix);
+    }
+    //printf("afasfsfsf:%s\n", EtcDir);_exit(-1);
+
     if (ps_show_version) {
         ps_show_version_info();
     }
@@ -306,6 +329,7 @@ main(int argc, char *argv[])
         }
     }
 
+
     acquire_daemonlock(0);
 
     init_config(&config);
@@ -313,7 +337,7 @@ main(int argc, char *argv[])
 
     cron_queue = config.cron;
 
-	char    line[1000];
+	//char    line[1000];
 
     switch (pid = fork()) {
         case -1:
@@ -331,7 +355,7 @@ main(int argc, char *argv[])
             while (PS_TRUE) {
 				timeRunning = virtualTime = clockTime;
 				int timeDiff;
-				enum timejump wakeupKind;
+				//enum timejump wakeupKind;
 
 				do {
 					cron_sleep(pfd, timeRunning + 1);

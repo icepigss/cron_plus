@@ -100,6 +100,8 @@ int    LineNumber;
 
 static int MaxJobId = 0;
 
+char EtcDir[100];
+
 int    DebugFlags;
 
 time_t StartTime;

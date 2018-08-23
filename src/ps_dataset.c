@@ -20,14 +20,14 @@ void
 load_file_data(config_t *old_config)
 {
     struct stat statbuf;
-    char configDir[100];
-    char *buf;
+    //char configDir[100];
     DIR *dir;
     struct dirent *dp;
     //config_t *new_config;
 
-    snprintf(configDir, sizeof(configDir), "%s/%s", getenv("HOME"), ETC_DIR);
-    if (stat(configDir, &statbuf) < 0) {
+    //snprintf(configDir, sizeof(configDir), "%s/%s", getenv("HOME"), ETC_DIR);
+    //if (stat(configDir, &statbuf) < 0) {
+    if (stat(EtcDir, &statbuf) < 0) {
         _exit(PS_FAILURE);
     }
 
@@ -38,7 +38,9 @@ load_file_data(config_t *old_config)
 
     old_config->mtime = statbuf.st_mtime;
 
-    if (!(dir = opendir(configDir))) {
+    if (!(dir = opendir(EtcDir))) {
+        char buf[100];
+        memset(buf, '\0', sizeof(buf));
         sprintf(buf, "%s: can not open dir (%s)", ProgramName, strerror(errno));
         ps_write_stderr(buf);
         ps_file_log(buf, 0);
@@ -203,16 +205,17 @@ load_cron(config_t *config, int crontab_fd, time_t mtime)
     char cmd[PS_MAXCMD];
     char line[PS_MAXCMD];
     char arr[10][PS_MAXCMD];
-    char *buf;
     int offline = 0;
     joblist_t *job;
 
     // TODO load cron
-    int ch, pre, invalid, online, newline, is_online;
+    int pre, invalid, online, newline, is_online;
     invalid = offline = online = 0;
     newline = 1;
 
     if (!(file = fdopen(crontab_fd, "r"))) {
+        char buf[100];
+        memset(buf, '\0', sizeof(buf));
         sprintf(buf, "%s: can not open config file (%s)", ProgramName, strerror(errno));
         ps_write_stderr(buf);
         ps_file_log(buf, 0);
